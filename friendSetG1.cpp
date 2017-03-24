@@ -6,6 +6,8 @@ using namespace std;
 
 int current;
 
+void complementGraph(int matrix[]);
+
 void maxVertex(int matrix[],int definiteVertex[]);
 
 void printResult(int matrix[]);
@@ -33,12 +35,29 @@ int main(int argc, char const *argv[])
     };
 
 
-
+    for (int i = 0; i < MAT_SIZE; ++i)
+             {
+             for (int j = 0; j < MAT_SIZE; ++j)
+             {
+                cout<<matrix[i*MAT_SIZE + j]<<",";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
     int definiteVertex[MAT_SIZE]; // matrix containing final output
-
     int finalSet[MAT_SIZE]; // matrix containing complement of definiteVertex
 
     /* Start Algo*/
+    /*Step 0*/complementGraph(matrix);
+
+         for (int i = 0; i < MAT_SIZE; ++i)
+             {
+             for (int j = 0; j < MAT_SIZE; ++j)
+             {
+                cout<<matrix[i*MAT_SIZE + j]<<",";
+        }
+        cout<<endl;
+    }
 
     /*Step 1*/resetMatrix(definiteVertex , -1);
     /*Step 2*/maxVertex(matrix,definiteVertex);
@@ -201,4 +220,25 @@ void fillSet(int finalSet[]){
 	}
 }
 
+void complementGraph(int matrix[])
+{
 
+    for (int i = 0; i < MAT_SIZE; ++i)
+    {
+        for (int j = 0; j < MAT_SIZE; ++j)
+        {
+
+            if (i!=j)
+            {
+                if (matrix[MAT_SIZE*i +j] == 1)
+                {
+                    matrix[MAT_SIZE*i +j] = 0;
+                }
+                else{
+                    matrix[MAT_SIZE*i +j] = 1;
+
+                }
+            }
+        }
+    }
+}
