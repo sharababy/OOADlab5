@@ -75,12 +75,12 @@ void maxVertex(int matrix[],int maxVertexList[]){
             }
             maxVertexList[0] = i;
             current = 1;
-            cout<<i<<" : "<<sum<<endl;
+            /*cout<<i<<" : "<<sum<<endl;*/
             max = sum;
         }
     }
 
-    printResult(maxVertexList);
+    //printResult(maxVertexList);
 
 }
 
@@ -115,7 +115,11 @@ void checkTriangle(int matrix[],int definiteVertex[]){
                     ){
                          // i,j,k are a triangle
 
+                        /*cout<<"i: "<<i<<" j: "<<j<<" k: "<<k;*/
+
                         int ch1 = matContains(definiteVertex,i,j,k);
+
+                        /*cout<<" val: "<<ch1<<endl;*/
 
                         if( ch1 == 0){
                             definiteVertex[current] = i;
@@ -181,23 +185,20 @@ int matContains(int matrix[] , int check1, int check2 ,int check3){
 
     for (int i = 0; i < MAT_SIZE; ++i)
     {
-        for (int j = 1; j <= MAT_SIZE; ++j)
-        {
-
-            value = matrix[MAT_SIZE*i + j];
+            value = matrix[i];
             if ( value == check1)
             {
                 one = 1;
             }
-            if (value == check2)
+            else if (value == check2)
             {
                 two = 1;
             }
-            if (value == check2)
+            else if (value == check3)
             {
                 three = 1;
             }
-        }
+        
     }
 
     if (one == 1  && two == 1 && three == 1)
