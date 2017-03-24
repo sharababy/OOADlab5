@@ -16,12 +16,19 @@ void checkTriangle(int matrix[],int definiteVertex[]);
 
 int matContains(int matrix[] , int check1, int check2 ,int check3);
 
+void removeDuplicates(int definiteVertex[]);
+
 int main(int argc, char const *argv[])
 {
         
-    int matrix[MAT_SIZE * MAT_SIZE] = {
+    int matrix[] = {
 
-        0,0,0,0,1,0,0,1,1,0,0,1,0,1,1,0,1,1,0,1,1,0,1,1,0
+0, 1, 1, 0, 1, 
+1, 0, 0, 1, 1, 
+1, 0, 0, 1, 1, 
+0, 1, 1, 0, 1, 
+1, 1, 1, 1, 0
+    
     };
 
 
@@ -33,7 +40,8 @@ int main(int argc, char const *argv[])
     /*Step 1*/resetMatrix(definiteVertex , -1);
     /*Step 2*/maxVertex(matrix,definiteVertex);
     /*Step 3*/checkTriangle(matrix,definiteVertex);
-    /*Step 4*/printResult(definiteVertex);
+    /*Step 4*/removeDuplicates(definiteVertex);
+    /*Step 5*/printResult(definiteVertex);
 
     /*End Algo*/
 
@@ -51,7 +59,7 @@ void maxVertex(int matrix[],int maxVertexList[]){
         sum = 0;
         for (int j = 0; j < MAT_SIZE; ++j)
         {
-            sum += matrix[MAT_SIZE*i + j];
+            sum += matrix[(MAT_SIZE*i) + j];
         }
 
         if (sum == max)
@@ -67,7 +75,7 @@ void maxVertex(int matrix[],int maxVertexList[]){
             }
             maxVertexList[0] = i;
             current = 1;
-
+            cout<<i<<" : "<<sum<<endl;
             max = sum;
         }
     }
@@ -77,8 +85,6 @@ void maxVertex(int matrix[],int maxVertexList[]){
 }
 
 void checkTriangle(int matrix[],int definiteVertex[]){
-
-    int tri[3];
 
 
     /*
@@ -93,21 +99,19 @@ void checkTriangle(int matrix[],int definiteVertex[]){
 
     for (int i = 0; i < MAT_SIZE; ++i)
     {
-        tri[0] = i;
         for (int j = 0; j < MAT_SIZE; ++j)
         {
-            if ( (matrix[MAT_SIZE*i] + j) == 1)
+            if ( (matrix[MAT_SIZE*i +j]) == 1)
             {
                 // i,j is an edge
-                tri[1] = j;
 
                 for (int k = 0; k < MAT_SIZE; ++k)
                 {
                     if(
                         
-                            (matrix[MAT_SIZE*i] + k) == 1
+                            (matrix[MAT_SIZE*i + k]) == 1
                             && 
-                            (matrix[MAT_SIZE*j] + k) == 1
+                            (matrix[MAT_SIZE*j + k]) == 1
                     ){
                          // i,j,k are a triangle
 
@@ -121,20 +125,17 @@ void checkTriangle(int matrix[],int definiteVertex[]){
                         }
                         else if (ch1 == 6)
                         {
-                            cout<<"He 1"<<endl;
                             definiteVertex[current] = j;
                             current++;
                         }
                         else if (ch1 == 5)
                         {
-                            cout<<"He 2"<<endl;
 
                             definiteVertex[current] = i;
                             current++;
                         }
                         else if (ch1 == 4)
                         {
-                            cout<<"He 3"<<endl;
 
                             definiteVertex[current] = i;
                             current++;
@@ -180,7 +181,7 @@ int matContains(int matrix[] , int check1, int check2 ,int check3){
 
     for (int i = 0; i < MAT_SIZE; ++i)
     {
-        for (int j = 0; j < MAT_SIZE; ++j)
+        for (int j = 1; j <= MAT_SIZE; ++j)
         {
 
             value = matrix[MAT_SIZE*i + j];
@@ -223,4 +224,19 @@ int matContains(int matrix[] , int check1, int check2 ,int check3){
     }
 
     return 0;
+}
+
+
+void removeDuplicates(int definiteVertex[]){
+
+    for (int i = 0; i < MAT_SIZE; ++i)
+    {
+        for (int j = i+1; j < MAT_SIZE; ++j)
+        {
+            if (definiteVertex[i] == definiteVertex[j])
+            {
+                definiteVertex[j] = -1;
+            }
+        }
+    }
 }
