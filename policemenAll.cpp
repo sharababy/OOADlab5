@@ -1,4 +1,6 @@
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 
 using namespace std;
 
@@ -14,9 +16,8 @@ void resetMatrixG1(int matrix[] ,int value);
 
 void checkTriangleG1(int matrix[],int definiteVertex[]);
 
-int matContainsG1(int matrix[] , int check1, int check2 ,int check3);
+int matContainsG1(int matrix[] , int check1, int check2);
 
-void removeDuplicatesG1(int definiteVertex[]);
 
 void maxVertexG2(int matrix[MAT_SIZE][MAT_SIZE],int maxVertexList[]);
 
@@ -31,31 +32,50 @@ int eraseG2(int sumArray[],int max,int matrix[MAT_SIZE][MAT_SIZE]);
 
 int main(int argc, char const *argv[])
 {
-	
-	current = 0;
-	int matrix2[MAT_SIZE][MAT_SIZE] = {
+	srand(time(NULL));
 
-			{0, 1, 1, 0, 1}, 
-			{1, 0, 0, 1, 1}, 
-			{1, 0, 0, 1, 1}, 
-			{0, 1, 1, 0, 1}, 
-			{1, 1, 1, 1, 0}
-    
-    };
+	int matrix2[MAT_SIZE][MAT_SIZE];
 
-    int matrix1[] = {
+    int matrix1[MAT_SIZE*MAT_SIZE];
 
-0, 1, 1, 0, 1, 
-1, 0, 0, 1, 1, 
-1, 0, 0, 1, 1, 
-0, 1, 1, 0, 1, 
-1, 1, 1, 1, 0
-    
-    };
+    for (int k = 0; k < 20; ++k)
+    {
+
+    	cout<<endl<<endl<<"Graph "<<k<<endl;
+
+		for (int i = 0; i < MAT_SIZE; ++i)
+		{
+			for (int j = i; j < MAT_SIZE; ++j)
+			{
+				if (i==j)
+				{
+					matrix2[i][j] = 0;
+				}
+				else{
+					matrix2[i][j] = rand()%2;
+				}
+				
+				matrix2[j][i] = matrix2[i][j];
+				matrix1[MAT_SIZE*i + j] = matrix2[i][j];
+				matrix1[MAT_SIZE*j + i] = matrix2[i][j];
+			}
+		}    
+		
+		for (int i = 0; i < MAT_SIZE; ++i)
+		{
+			for (int j = 0; j < MAT_SIZE; ++j)
+			{
+				cout<<matrix2[i][j]<<",";
+			}
+			cout<<endl;
+		}
+
+
 
     int definiteVertex[MAT_SIZE];
 
     /*Greedy1*/
+	current = 0;
 
     /*Step 1*/resetMatrixG1(definiteVertex , -1);
     /*Step 2*/maxVertexG1(matrix1,definiteVertex);
@@ -63,12 +83,16 @@ int main(int argc, char const *argv[])
     cout<<" Greedy 1: "<<endl;
     /*Step 4*/printResultG1(definiteVertex);
 
+
     /*Greedy2*/
     current = 0;
+
     /*Step 1*/resetMatrixG2(definiteVertex , -1);
     /*Step 2*/maxVertexG2(matrix2,definiteVertex);
     cout<<" Greedy 2: "<<endl;
     /*Step 3*/printResultG2(definiteVertex);
+
+	}
 
 	return 0;
 }
@@ -131,49 +155,12 @@ void checkTriangleG1(int matrix[],int definiteVertex[]){
             {
                 // i,j is an edge
 
-                for (int k = 0; k < MAT_SIZE; ++k)
+                if (matContainsG1(definiteVertex,i,j) == 0)
                 {
-                    if(
-                        
-                            (matrix[MAT_SIZE*i + k]) == 1
-                            && 
-                            (matrix[MAT_SIZE*j + k]) == 1
-                    ){
-                         // i,j,k are a triangle
-
-                        /*cout<<"i: "<<i<<" j: "<<j<<" k: "<<k;*/
-
-                        int ch1 = matContainsG1(definiteVertex,i,j,k);
-
-                        /*cout<<" val: "<<ch1<<endl;*/
-
-                        if( ch1 == 0){
-                            definiteVertex[current] = i;
-                            current++;
-                            definiteVertex[current] = j;
-                            current++;
-                        }
-                        else if (ch1 == 6)
-                        {
-                            definiteVertex[current] = j;
-                            current++;
-                        }
-                        else if (ch1 == 5)
-                        {
-
-                            definiteVertex[current] = i;
-                            current++;
-                        }
-                        else if (ch1 == 4)
-                        {
-
-                            definiteVertex[current] = i;
-                            current++;
-                        }
-
-                        removeDuplicatesG1(definiteVertex);
-                    }
+                    definiteVertex[current] = i;
+                    current++;
                 }
+                
             }
         }
     }
@@ -207,9 +194,9 @@ void resetMatrixG1(int matrix[] ,int value){
 }
 
 
-int matContainsG1(int matrix[] , int check1, int check2 ,int check3){
+int matContainsG1(int matrix[] , int check1, int check2){
 
-    int one=0,two=0,three=0,value;
+    int one=0,two=0,value;
 
     for (int i = 0; i < MAT_SIZE; ++i)
     {
@@ -222,56 +209,21 @@ int matContainsG1(int matrix[] , int check1, int check2 ,int check3){
             {
                 two = 1;
             }
-            else if (value == check3)
-            {
-                three = 1;
-            }
         
     }
 
-    if (one == 1  && two == 1 && three == 1)
+    if (one == 1  && two == 1 )
     {
-        return 7;
+        return 1;
     }
-    else if(one == 1  && two == 0 && three == 0){
-        return 6;
-    }
-    else if(one == 0  && two == 1 && three == 0){
-        return 5;
-    }
-    else if(one == 0  && two == 0 && three == 1){
-        return 4;
-    }
-    else if(one == 1  && two == 1 && three == 0){
-        return 3;
-    }
-    else if(one == 0  && two == 1 && three == 1){
+    else if(one == 1  && two == 0 ){
         return 2;
     }
-    else if(one == 1  && two == 0 && three == 1){
-        return 1;
+    else if(one == 0  && two == 1 ){
+        return 3;
     }
 
     return 0;
-}
-
-
-void removeDuplicatesG1(int definiteVertex[]){
-
-    for (int i = 0; i < MAT_SIZE; ++i)
-    {
-        for (int j = i+1; j < MAT_SIZE; ++j)
-        {
-            if (definiteVertex[i] == definiteVertex[j])
-            {
-               for (int k = j+1; k < MAT_SIZE; ++k)
-               {
-                    definiteVertex[k-1] = definiteVertex[k];
-               }
-               definiteVertex[MAT_SIZE-1] = -1;
-            }
-        }
-    }
 }
 
 

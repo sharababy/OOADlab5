@@ -14,21 +14,17 @@ void resetMatrix(int matrix[] ,int value);
 
 void checkTriangle(int matrix[],int definiteVertex[]);
 
-int matContains(int matrix[] , int check1, int check2 ,int check3);
-
-void removeDuplicates(int definiteVertex[]);
+int matContains(int matrix[] , int check1, int check2);
 
 int main(int argc, char const *argv[])
 {
         
     int matrix[] = {
-
-0, 1, 1, 0, 1, 
-1, 0, 0, 1, 1, 
-1, 0, 0, 1, 1, 
-0, 1, 1, 0, 1, 
-1, 1, 1, 1, 0
-    
+0,0,1,1,0,
+0,0,1,0,1,
+1,1,0,1,0,
+1,0,1,0,0,
+0,1,0,0,0,
     };
 
 
@@ -104,49 +100,12 @@ void checkTriangle(int matrix[],int definiteVertex[]){
             {
                 // i,j is an edge
 
-                for (int k = 0; k < MAT_SIZE; ++k)
+                if (matContains(definiteVertex,i,j) == 0)
                 {
-                    if(
-                        
-                            (matrix[MAT_SIZE*i + k]) == 1
-                            && 
-                            (matrix[MAT_SIZE*j + k]) == 1
-                    ){
-                         // i,j,k are a triangle
-
-                        /*cout<<"i: "<<i<<" j: "<<j<<" k: "<<k;*/
-
-                        int ch1 = matContains(definiteVertex,i,j,k);
-
-                        /*cout<<" val: "<<ch1<<endl;*/
-
-                        if( ch1 == 0){
-                            definiteVertex[current] = i;
-                            current++;
-                            definiteVertex[current] = j;
-                            current++;
-                        }
-                        else if (ch1 == 6)
-                        {
-                            definiteVertex[current] = j;
-                            current++;
-                        }
-                        else if (ch1 == 5)
-                        {
-
-                            definiteVertex[current] = i;
-                            current++;
-                        }
-                        else if (ch1 == 4)
-                        {
-
-                            definiteVertex[current] = i;
-                            current++;
-                        }
-
-                        removeDuplicates(definiteVertex);
-                    }
+                    definiteVertex[current] = i;
+                    current++;
                 }
+                
             }
         }
     }
@@ -180,9 +139,9 @@ void resetMatrix(int matrix[] ,int value){
 }
 
 
-int matContains(int matrix[] , int check1, int check2 ,int check3){
+int matContains(int matrix[] , int check1, int check2){
 
-    int one=0,two=0,three=0,value;
+    int one=0,two=0,value;
 
     for (int i = 0; i < MAT_SIZE; ++i)
     {
@@ -195,54 +154,20 @@ int matContains(int matrix[] , int check1, int check2 ,int check3){
             {
                 two = 1;
             }
-            else if (value == check3)
-            {
-                three = 1;
-            }
         
     }
 
-    if (one == 1  && two == 1 && three == 1)
+    if (one == 1  && two == 1 )
     {
-        return 7;
+        return 1;
     }
-    else if(one == 1  && two == 0 && three == 0){
-        return 6;
-    }
-    else if(one == 0  && two == 1 && three == 0){
-        return 5;
-    }
-    else if(one == 0  && two == 0 && three == 1){
-        return 4;
-    }
-    else if(one == 1  && two == 1 && three == 0){
-        return 3;
-    }
-    else if(one == 0  && two == 1 && three == 1){
+    else if(one == 1  && two == 0 ){
         return 2;
     }
-    else if(one == 1  && two == 0 && three == 1){
-        return 1;
+    else if(one == 0  && two == 1 ){
+        return 3;
     }
 
     return 0;
 }
 
-
-void removeDuplicates(int definiteVertex[]){
-
-    for (int i = 0; i < MAT_SIZE; ++i)
-    {
-        for (int j = i+1; j < MAT_SIZE; ++j)
-        {
-            if (definiteVertex[i] == definiteVertex[j])
-            {
-               for (int k = j+1; k < MAT_SIZE; ++k)
-               {
-                    definiteVertex[k-1] = definiteVertex[k];
-               }
-               definiteVertex[MAT_SIZE-1] = -1;
-            }
-        }
-    }
-}
