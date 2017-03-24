@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
     /*Step 1*/resetMatrix(definiteVertex , -1);
     /*Step 2*/maxVertex(matrix,definiteVertex);
     /*Step 3*/checkTriangle(matrix,definiteVertex);
-    /*Step 4*/removeDuplicates(definiteVertex);
+    /*Step 4*/
     /*Step 5*/printResult(definiteVertex);
 
     /*End Algo*/
@@ -144,6 +144,8 @@ void checkTriangle(int matrix[],int definiteVertex[]){
                             definiteVertex[current] = i;
                             current++;
                         }
+
+                        removeDuplicates(definiteVertex);
                     }
                 }
             }
@@ -236,7 +238,11 @@ void removeDuplicates(int definiteVertex[]){
         {
             if (definiteVertex[i] == definiteVertex[j])
             {
-                definiteVertex[j] = -1;
+               for (int k = j+1; k < MAT_SIZE; ++k)
+               {
+                    definiteVertex[k-1] = definiteVertex[k];
+               }
+               definiteVertex[MAT_SIZE-1] = -1;
             }
         }
     }
