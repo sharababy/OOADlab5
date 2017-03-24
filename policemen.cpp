@@ -21,8 +21,7 @@ int main(int argc, char const *argv[])
         
     int matrix[MAT_SIZE * MAT_SIZE] = {
 
-        0,1,0,0,1,1,0,0,0,1,0,0,0,1,1,0,0,1,0,1,1,1,1,1,0
-
+        0,0,0,0,1,0,0,1,1,0,0,1,0,1,1,0,1,1,0,1,1,0,1,1,0
     };
 
 
@@ -49,25 +48,31 @@ void maxVertex(int matrix[],int maxVertexList[]){
 
     for (int i = 0; i < MAT_SIZE; ++i)
     {
+        sum = 0;
         for (int j = 0; j < MAT_SIZE; ++j)
         {
             sum += matrix[MAT_SIZE*i + j];
         }
 
         if (sum == max)
-        {
+        {            
             maxVertexList[current] = i;
             current++;
         }
         else if(sum > max){
-            for (int i = 0; i < current-1; ++i)
+
+            for (int j = 0; j < MAT_SIZE; ++j)
             {
-                maxVertexList[i] = -1;
+                maxVertexList[j] = -1;
             }
             maxVertexList[0] = i;
             current = 1;
+
+            max = sum;
         }
     }
+
+    printResult(maxVertexList);
 
 }
 
@@ -116,17 +121,22 @@ void checkTriangle(int matrix[],int definiteVertex[]){
                         }
                         else if (ch1 == 6)
                         {
+                            cout<<"He 1"<<endl;
                             definiteVertex[current] = j;
                             current++;
                         }
                         else if (ch1 == 5)
                         {
+                            cout<<"He 2"<<endl;
+
                             definiteVertex[current] = i;
                             current++;
                         }
                         else if (ch1 == 4)
                         {
-                            definiteVertex[current] = j;
+                            cout<<"He 3"<<endl;
+
+                            definiteVertex[current] = i;
                             current++;
                         }
                     }
